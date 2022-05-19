@@ -1,9 +1,11 @@
 import {React} from 'react'
 
-const Person = ({validPeople}) => {
+const Person = ({name, number, handleDelete}) => {
     return(
-        validPeople.map((person, i) =>
-            <p key={i}>{person.name} {person.number}</p>)
+        <div>
+            <p>{name} {number} </p>
+            <button onClick={handleDelete}>delete</button>
+        </div>
     )
 }
 
