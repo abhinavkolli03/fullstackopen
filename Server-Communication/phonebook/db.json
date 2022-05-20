@@ -1,8 +1,8 @@
 {
   "persons": [
     {
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523",
+      "name": "ada lovelace",
+      "number": "23328941122",
       "id": 2
     },
     {
@@ -19,11 +19,6 @@
       "name": "arto hellas",
       "number": "123456",
       "id": 5
-    },
-    {
-      "name": "abhinav kolli",
-      "number": "12334385",
-      "id": 6
     }
   ]
 }

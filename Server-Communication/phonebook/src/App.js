@@ -1,12 +1,12 @@
-import logo from './logo.svg';
-import './App.css';
 import {React} from 'react'
 import {useState, useEffect} from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
-import axios from 'axios'
 import phoneService from './services/phoneService'
+import SuccessPopup from './components/SuccessPopup'
+import ErrorPopup from './components/ErrorPopup'
+import { NULL } from 'mysql/lib/protocol/constants/types'
 
 const App = () => {
   useEffect(() => {
@@ -21,6 +21,9 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
   const [applyFilter, setApplyFilter] = useState(false)
+  const [successMessage, setSuccessMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
+
 
   const validPeople = applyFilter ? persons.filter((p) => p.name.toLowerCase().includes(newFilter.toLowerCase())) : persons
 
@@ -31,17 +34,24 @@ const App = () => {
       window.confirm(`${finding.name} and ${finding.number} are alrady added to the phonebook.`)
     } 
     else if (finding && (finding.number !== newNumber)) {
-      console.log('hello')
       if(window.confirm(`${finding.name} is alrady added to the phonebook. Would you like to replace the old number with a new one?`)) {
         phoneService.update(finding.id, {name: newName, number: newNumber}).then(returnedContact => {
           setPersons(persons.map(personItem => personItem.id !== finding.id ? personItem : returnedContact))
         })
+        setSuccessMessage(`Changed ${newName}'s phone number`)
+        setTimeout(() => {
+          setSuccessMessage(null)
+        }, 5000)
       }
     } 
     else {
       phoneService.create({name: newName, number: newNumber}).then(returnedContact => {
         setPersons(persons.concat(returnedContact))
       })
+      setSuccessMessage(`Added ${newName}`)
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 5000)
     }
   }
 
@@ -65,13 +75,21 @@ const App = () => {
         .then(phoneContent => {
           setPersons(phoneContent)
         })
-      })
+        setSuccessMessage(`Successfully deleted ${person.name}`)
+      }).catch(error => {
+        setErrorMessage(`Information of ${person.name} has already been removed from server`)
+      }) 
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <SuccessPopup successMessage={successMessage} />
+      <ErrorPopup errorMessage={errorMessage} />
       <form>
         <Filter figureFilter={figureFilter}/>
         <h3>add a new</h3>
