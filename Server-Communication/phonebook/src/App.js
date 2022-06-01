@@ -6,7 +6,6 @@ import Persons from './components/Persons'
 import phoneService from './services/phoneService'
 import SuccessPopup from './components/SuccessPopup'
 import ErrorPopup from './components/ErrorPopup'
-import { NULL } from 'mysql/lib/protocol/constants/types'
 
 const App = () => {
   useEffect(() => {
