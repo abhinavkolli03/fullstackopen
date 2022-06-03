@@ -4,7 +4,6 @@ import {useState, useEffect} from 'react'
 import noteService from './services/notes'
 import Notification from './components/Notification'
 import Footer from './components/Footer'
-import axios from 'axios'
 
 const App = () => {
   const [notes, setNotes] = useState([])
@@ -13,8 +12,8 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/api/notes')
+    noteService
+      .getAll()
       .then(res => {
         setNotes(res.data)
       })
